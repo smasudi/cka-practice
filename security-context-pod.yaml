@@ -1,0 +1,22 @@
+#Check : Pod Security Context Configuration
+#Create a pod named secpod in the dnn namespace which includes 2 containers named c1 and c2. Both containers must be configured to run the bash image, and should execute the command /usr/local/bin/bash -c sleep 3600. Container c1 should run as user ID 1000, and container c2 should run as user ID 2000. Both containers should use file system group ID 3000.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secpod
+spec:
+  securityContext:
+    fsGroup: 3000
+  containers:
+  - name: c1
+    image: bash
+    command: [ "/usr/local/bin/bash", "-c", "sleep 3600" ]
+    securityContext:
+      runAsUser: 1000
+  - name: c2
+    image: bash
+    command: [ "/usr/local/bin/bash", "-c", "sleep 3600" ]
+    securityContext:
+      runAsUser: 2000
+

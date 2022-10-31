@@ -1,0 +1,32 @@
+The following two Pods have been created in the sec1 Namespace:
+
+pod1 has the label app=test
+pod2 has the label app=client
+A NetworkPolicy named netpol1 has also been established in the sec1 Namespace but is currently blocking traffic sent from pod2 to pod1. 
+Update the NetworkPolicy to ensure that pod2 can send traffic to pod1. Ensure the NetworkPolicy is still being applied to pod2 in your solution.
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"NetworkPolicy","metadata":{"annotations":{},"name":"netpol1","namespace":"sec1"},"spec":{"ingress":[{"from":[{"podSelector":{"matchLabels":{"app":"test"}}}]}],"podSelector":{"matchLabels":{"app":"test"}}}}
+  creationTimestamp: "2022-10-31T13:28:48Z"
+  generation: 1
+  name: netpol1
+  namespace: sec1
+  resourceVersion: "7554"
+  uid: fab8d27f-af19-4550-a734-13ccd3299706
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: client
+  podSelector:
+    matchLabels:
+      app: test
+  policyTypes:
+  - Ingress
+status: {}
+

@@ -1,0 +1,38 @@
+Volume Mounts
+The following manifest declares a single Pod named logger in the blah namespace. The logger Pod contains two containers c1 and c2. 
+Before applying this manifest into the cluster, update it so that it declares a hostPath based Volume named vol1 with the host path set to /tmp/vol, 
+and then mount this volume into both the c1 and c2 containers using the container directory /var/log/blah.
+
+ubuntu@ip-10-0-128-5:~$ cat pod.yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    env: prod
+  name: logger
+  namespace: blah
+spec:
+  containers:
+  - image: bash
+    name: c1
+    command: ["/usr/local/bin/bash", "-c"]
+    args:
+    - ifconfig > /var/log/blah/data;
+      sleep 3600;
+    volumeMounts:
+    - mountPath: /var/log/blah
+      name: vol1
+  - image: bash
+    name: c2
+    command: ["/usr/local/bin/bash", "-c"]
+    args:
+    - sleep 3600;
+    volumeMounts:
+    - mountPath: /var/log/blah
+      name: vol1
+  volumes:
+  - name: vol1
+    hostPath:
+      # directory location on host
+      path: /tmp/vol
+ubuntu@ip-10-0-128-5:~$ 

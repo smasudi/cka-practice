@@ -1,0 +1,24 @@
+A pod named skynet has been deployed into the ca2 namespace. This pod has the following file /skynet/t2-specs.txt located within it, containing important information. 
+You need to extract this file and save it to the following location /home/ubuntu/t2-specs.txt.
+
+ubuntu@ip-10-0-128-5:~$ kubectl get pod skynet -n ca2 -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    model: t2
+  name: skynet
+  namespace: ca2
+spec:
+  containers:
+    image: bash
+    imagePullPolicy: Always
+    name: skynet
+    volumeMounts:
+    - mountPath: /skynet/t2-specs.txt
+      name: importantdata
+  volumes:
+  - hostPath:
+      path: /home/ubuntu/t2-specs.txt
+      type: FileOrCreate
+    name: importantdata
